@@ -12,10 +12,18 @@ public class Craps {
 
   public static void main(String[] args) {
     Craps craps = new Craps();
-    try (Scanner scanner = new Scanner(System.in)) {
-      do {
-        craps.play(true);
-      } while (craps.playAgain(scanner));
+    if (args.length > 0) {
+      int numTrials = Integer.parseInt(args[0]);
+      for (int i = 0; i < numTrials; i++) {
+        craps.play(false);
+      }
+      craps.displayTally();
+    } else {
+      try (Scanner scanner = new Scanner(System.in)) {
+        do {
+          craps.play(true);
+        } while (craps.playAgain(scanner));
+      }
     }
   }
 
@@ -32,11 +40,15 @@ public class Craps {
         System.out.printf("%d:%d%n", diceRoll[0], diceRoll[1]);
       }
       System.out.printf("Outcome: %s%n", state);
-      long wins = game.getWins();
-      long total = wins + game.getLosses();
-      double percentage = 100.0 * wins / total;
-      System.out.printf("Winning percentage = (%d/%d) = %.2f%%%n", wins, total, percentage);
+      displayTally();
     }
+  }
+
+  private void displayTally() {
+    long wins = game.getWins();
+    long total = wins + game.getLosses();
+    double percentage = 100.0 * wins / total;
+    System.out.printf("Winning percentage = (%d/%d) = %.2f%%%n", wins, total, percentage);
   }
 
   private boolean playAgain(Scanner scanner) {
